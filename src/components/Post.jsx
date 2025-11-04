@@ -27,6 +27,10 @@ export function Post({ author, publishedAt, content }) {
 		setNewCommentText("");
 	};
 
+	const deleteComment = (comment) => {
+		console.log(`Deletar comentário ${comment}`)
+	}
+
 	const publishedDateFormatted = format(
 		publishedAt,
 		"d 'de' LLLL 'às' HH:mm'h'",
@@ -96,11 +100,12 @@ export function Post({ author, publishedAt, content }) {
 				{comments.map((comment) => {
 					return (
 						<Comment
-							key={comment}
-							userName={"Jean Carlo"}
-							applauseCount={34}
-							commentText={comment}
-							src={"https://github.com/antonyg.png"}
+						key={comment}
+						userName={"Jean Carlo"}
+						applauseCount={34}
+						commentText={comment}
+						src={"https://github.com/antonyg.png"}
+						onDeleteComment={deleteComment}
 						/>
 					);
 				})}
