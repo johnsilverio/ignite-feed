@@ -14,7 +14,7 @@ export function Post({ author, publishedAt, content }) {
 			id: crypto.randomUUID(),
 			text: "Muito bom Devon, parabéns!! 👏👏",
 			userName: "Jean Carlo",
-			applauseCount: 34,
+			applauseCount: 38,
 			src: "https://github.com/antonyg.png",
 		},
 	]);
@@ -24,6 +24,11 @@ export function Post({ author, publishedAt, content }) {
 
 	const handleNewCommentChange = (e) => {
 		setNewCommentText(e.target.value);
+		e.target.setCustomValidity("");
+	};
+
+	const handleNewCommentInvalid = (e) => {
+		e.target.setCustomValidity("Esse campo é obrigatório");
 	};
 
 	const handleCreateNewComment = (e) => {
@@ -59,6 +64,8 @@ export function Post({ author, publishedAt, content }) {
 		locale: ptBR,
 		addSuffix: true,
 	});
+
+	const isNewCommentEmpty = newCommentText.length === 0;
 
 	return (
 		<article className={styles.post}>
@@ -104,10 +111,14 @@ export function Post({ author, publishedAt, content }) {
 					name="comment"
 					value={newCommentText}
 					placeholder="Deixe um comentário!"
+					onInvalid={handleNewCommentInvalid}
+					required
 				/>
 
 				<footer>
-					<button type="submit">Publicar</button>
+					<button type="submit" disabled={isNewCommentEmpty}>
+						Publicar
+					</button>
 				</footer>
 			</form>
 
@@ -117,12 +128,12 @@ export function Post({ author, publishedAt, content }) {
 					return (
 						<Comment
 							key={comment.id}
-							userName={comment.userName} 
-							applauseCount={comment.applauseCount} 
-							commentText={comment.text} 
-							src={comment.src} 
+							userName={comment.userName}
+							applauseCount={comment.applauseCount}
+							commentText={comment.text}
+							src={comment.src}
 							onDeleteComment={deleteComment}
-							commentId={comment.id} 
+							commentId={comment.id}
 						/>
 					);
 				})}

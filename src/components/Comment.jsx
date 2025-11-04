@@ -1,6 +1,7 @@
 import { ThumbsUpIcon, TrashIcon } from "@phosphor-icons/react";
 import styles from "./Comment.module.css";
 import { Avatar } from "./Avatar";
+import { useState } from "react";
 
 export function Comment({
 	src,
@@ -10,8 +11,16 @@ export function Comment({
 	onDeleteComment,
 	commentId,
 }) {
+	const [localApplauseCount, setApplauseCount] = useState(applauseCount);
+
 	const handleDeleteComment = () => {
 		onDeleteComment(commentId);
+	};
+
+	const handleApplauseComment = () => {
+		setApplauseCount((state) => {
+			return state + 1;
+		});
 	};
 
 	return (
@@ -34,9 +43,9 @@ export function Comment({
 					<p>{commentText}</p>
 				</div>
 				<footer>
-					<button>
+					<button onClick={handleApplauseComment}>
 						<ThumbsUpIcon />
-						Aplaudir <span>{applauseCount}</span>
+						Aplaudir <span>{localApplauseCount}</span>
 					</button>
 				</footer>
 			</div>
