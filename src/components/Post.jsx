@@ -10,7 +10,13 @@ import styles from "./Post.module.css";
 export function Post({ author, publishedAt, content }) {
 	// Mostrar os comentários existentes
 	const [comments, setComments] = useState([
-		"Muito bom Devon, parabéns!! 👏👏",
+		{
+			id: crypto.randomUUID(),
+			text: "Muito bom Devon, parabéns!! 👏👏",
+			userName: "Jean Carlo",
+			applauseCount: 34,
+			src: "https://github.com/antonyg.png",
+		},
 	]);
 
 	// Inserir novos comentários
@@ -22,14 +28,24 @@ export function Post({ author, publishedAt, content }) {
 
 	const handleCreateNewComment = (e) => {
 		e.preventDefault();
-		// Imutabilidade, ele vai inserir novos comentários referenciando os que já existem.
-		setComments([...comments, newCommentText]);
+		// Imutabilidade -> ele vai inserir novos comentários referenciando os que já existem.
+		const newComment = {
+			id: crypto.randomUUID(),
+			text: newCommentText,
+			userName: "John Silverio",
+			applauseCount: 0,
+			src: "https://github.com/johnsilverio.png",
+		};
+		setComments([...comments, newComment]);
 		setNewCommentText("");
 	};
 
-	const deleteComment = (comment) => {
-		console.log(`Deletar comentário ${comment}`)
-	}
+	const deleteComment = (commentIdToDelete) => {
+		const commentsWithoutDeletedOne = comments.filter((comment) => {
+			return comment.id !== commentIdToDelete;
+		});
+		setComments(commentsWithoutDeletedOne); // Imutabilidade
+	};
 
 	const publishedDateFormatted = format(
 		publishedAt,
@@ -68,10 +84,10 @@ export function Post({ author, publishedAt, content }) {
 			<div className={styles.content}>
 				{content.map((line) => {
 					if (line.type === "paragraph") {
-						return <p key={line.content}>{line.content}</p>;
+						return <p key={crypto.randomUUID()}>{line.content}</p>;
 					} else if (line.type === "link") {
 						return (
-							<p key={line.content}>
+							<p key={crypto.randomUUID()}>
 								<a href="#">{line.content}</a>
 							</p>
 						);
@@ -100,12 +116,13 @@ export function Post({ author, publishedAt, content }) {
 				{comments.map((comment) => {
 					return (
 						<Comment
-						key={comment}
-						userName={"Jean Carlo"}
-						applauseCount={34}
-						commentText={comment}
-						src={"https://github.com/antonyg.png"}
-						onDeleteComment={deleteComment}
+							key={comment.id}
+							userName={comment.userName} 
+							applauseCount={comment.applauseCount} 
+							commentText={comment.text} 
+							src={comment.src} 
+							onDeleteComment={deleteComment}
+							commentId={comment.id} 
 						/>
 					);
 				})}

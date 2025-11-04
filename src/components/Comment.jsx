@@ -2,11 +2,17 @@ import { ThumbsUpIcon, TrashIcon } from "@phosphor-icons/react";
 import styles from "./Comment.module.css";
 import { Avatar } from "./Avatar";
 
-export function Comment({ src, commentText, applauseCount, userName, onDeleteComment }) {
-
-	const handleDeleteComment = (e) => {
-		onDeleteComment(commentText)
-	}
+export function Comment({
+	src,
+	commentText,
+	applauseCount,
+	userName,
+	onDeleteComment,
+	commentId,
+}) {
+	const handleDeleteComment = () => {
+		onDeleteComment(commentId);
+	};
 
 	return (
 		<div className={styles.comment}>
