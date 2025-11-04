@@ -8,10 +8,12 @@ import { Comment } from "./Comment";
 import styles from "./Post.module.css";
 
 export function Post({ author, publishedAt, content }) {
+	// Mostrar os comentários existentes
 	const [comments, setComments] = useState([
 		"Muito bom Devon, parabéns!! 👏👏",
 	]);
 
+	// Inserir novos comentários
 	const [newCommentText, setNewCommentText] = useState("");
 
 	const handleNewCommentChange = (e) => {
@@ -20,8 +22,9 @@ export function Post({ author, publishedAt, content }) {
 
 	const handleCreateNewComment = (e) => {
 		e.preventDefault();
+		// Imutabilidade, ele vai inserir novos comentários referenciando os que já existem.
 		setComments([...comments, newCommentText]);
-		setNewCommentText('');
+		setNewCommentText("");
 	};
 
 	const publishedDateFormatted = format(
@@ -61,10 +64,10 @@ export function Post({ author, publishedAt, content }) {
 			<div className={styles.content}>
 				{content.map((line) => {
 					if (line.type === "paragraph") {
-						return <p>{line.content}</p>;
+						return <p key={line.content}>{line.content}</p>;
 					} else if (line.type === "link") {
 						return (
-							<p>
+							<p key={line.content}>
 								<a href="#">{line.content}</a>
 							</p>
 						);
@@ -93,6 +96,7 @@ export function Post({ author, publishedAt, content }) {
 				{comments.map((comment) => {
 					return (
 						<Comment
+							key={comment}
 							userName={"Jean Carlo"}
 							applauseCount={34}
 							commentText={comment}
