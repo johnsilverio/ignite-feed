@@ -27,10 +27,10 @@ export function Post({ author, publishedAt, content }: PostProps) {
 	const [comments, setComments] = useState<Comment[]>([
 		{
 			id: crypto.randomUUID(),
-			text: "Muito bom Devon, parabéns!! 👏👏",
+			text: "Muito bom, parabéns!! 👏👏",
 			userName: "Jean Carlo",
 			applauseCount: 38,
-			src: "https://github.com/antonyg.png",
+			src: "https://github.com/jeancarlo217.png",
 		},
 	]);
 
