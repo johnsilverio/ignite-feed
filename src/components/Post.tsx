@@ -1,15 +1,30 @@
 import { format, formatDistanceToNow } from "date-fns";
 import { ptBR } from "date-fns/locale/pt-BR";
-import { useState } from "react";
+import { useState, type ChangeEvent, type FormEvent, type InvalidEvent } from "react";
 
-import { Avatar } from "./Avatar";
-import { Comment } from "./Comment";
+import { Avatar } from "./Avatar.tsx";
+import { Comment } from "./Comment.tsx";
+import type { Author, Content } from "../App.tsx";
 
 import styles from "./Post.module.css";
 
-export function Post({ author, publishedAt, content }) {
+interface Comment {
+	id: string;
+	text: string;
+	userName: string;
+	applauseCount: number;
+	src: string;
+}
+
+interface PostProps {
+	author: Author;
+	publishedAt: Date;
+	content: Array<Content>;
+}
+
+export function Post({ author, publishedAt, content }: PostProps) {
 	// Mostrar os comentários existentes
-	const [comments, setComments] = useState([
+	const [comments, setComments] = useState<Comment[]>([
 		{
 			id: crypto.randomUUID(),
 			text: "Muito bom Devon, parabéns!! 👏👏",
@@ -20,18 +35,18 @@ export function Post({ author, publishedAt, content }) {
 	]);
 
 	// Inserir novos comentários
-	const [newCommentText, setNewCommentText] = useState("");
+	const [newCommentText, setNewCommentText] = useState<string>("");
 
-	const handleNewCommentChange = (e) => {
-		setNewCommentText(e.target.value);
+	const handleNewCommentChange = (e: ChangeEvent<HTMLTextAreaElement>) => {
 		e.target.setCustomValidity("");
+		setNewCommentText(e.target.value);
 	};
 
-	const handleNewCommentInvalid = (e) => {
+	const handleNewCommentInvalid = (e: InvalidEvent<HTMLTextAreaElement>) => {
 		e.target.setCustomValidity("Esse campo é obrigatório");
 	};
 
-	const handleCreateNewComment = (e) => {
+	const handleCreateNewComment = (e: FormEvent) => {
 		e.preventDefault();
 		// Imutabilidade -> ele vai inserir novos comentários referenciando os que já existem.
 		const newComment = {
@@ -45,7 +60,7 @@ export function Post({ author, publishedAt, content }) {
 		setNewCommentText("");
 	};
 
-	const deleteComment = (commentIdToDelete) => {
+	const deleteComment = (commentIdToDelete: string) => {
 		const commentsWithoutDeletedOne = comments.filter((comment) => {
 			return comment.id !== commentIdToDelete;
 		});
@@ -97,6 +112,10 @@ export function Post({ author, publishedAt, content }) {
 							<p key={crypto.randomUUID()}>
 								<a href="#">{line.content}</a>
 							</p>
+						);
+					} else if (line.type === "hashtag") {
+						return (
+							<a key={crypto.randomUUID()} href="#">{line.content} </a>
 						);
 					}
 				})}
