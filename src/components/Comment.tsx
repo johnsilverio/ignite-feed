@@ -10,6 +10,7 @@ interface CommentProps {
 	userName: string;
 	commentId: string;
 	onDeleteComment: (commentId: string) => void;
+	key?: string;
 }
 
 export function Comment({
